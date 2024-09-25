@@ -1,34 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class ObjectRotate : MonoBehaviour
 {
-    [SerializeField] public float rotateSpeed = 1;
-    [SerializeField] private Transform rotateAround;
+    public float rotateSpeed = 100;
+    public Transform rotateAround;
 
-    private bool autoRotate = false;
+    private bool isClockwise = true;
 
 
-    // Update is called once per frame
+
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        float rotationAmount = rotateSpeed * Time.deltaTime;
+        if (!isClockwise)
         {
-            ToggleAutoRotate();
+            rotationAmount = -rotationAmount;
         }
 
-        if (autoRotate)
+        if (rotateAround != null)
         {
-            this.transform.RotateAround(rotateAround.position, Vector3.forward, rotateSpeed * Time.deltaTime);
-            this.transform.Rotate(Vector3.forward, -rotateSpeed * Time.deltaTime);
+            transform.RotateAround(rotateAround.position, Vector3.forward, rotationAmount);
         }
+
+        // Check if the space key is pressed
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ToggleRotationDirection();
+        }
+     
     }
 
-    
-
-    private void ToggleAutoRotate()
+    void ToggleRotationDirection()
     {
-        this.autoRotate = !this.autoRotate;
+        // Toggle the direction
+        isClockwise = !isClockwise;
     }
+
 }
+
+
+
